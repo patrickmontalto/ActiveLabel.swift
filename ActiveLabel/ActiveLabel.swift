@@ -48,6 +48,11 @@ typealias ElementTuple = (range: NSRange, element: ActiveElement, type: ActiveTy
     open var customColor: [ActiveType : UIColor] = [:] {
         didSet { updateTextStorage(parseText: false) }
     }
+    
+    open var customFont: [ActiveType : UIFont] = [:] {
+        didSet { updateTextStorage(parseText: false) }
+    }
+    
     open var customSelectedColor: [ActiveType : UIColor] = [:] {
         didSet { updateTextStorage(parseText: false) }
     }
@@ -276,6 +281,7 @@ typealias ElementTuple = (range: NSRange, element: ActiveElement, type: ActiveTy
             mutAttrString.mutableString.setString(newString)
         }
 
+        
         addLinkAttribute(mutAttrString)
         textStorage.setAttributedString(mutAttrString)
         _customizing = true
@@ -316,6 +322,13 @@ typealias ElementTuple = (range: NSRange, element: ActiveElement, type: ActiveTy
             case .hashtag: attributes[NSForegroundColorAttributeName] = hashtagColor
             case .url: attributes[NSForegroundColorAttributeName] = URLColor
             case .custom: attributes[NSForegroundColorAttributeName] = customColor[type] ?? defaultCustomColor
+            
+            }
+            
+            switch type {
+            case .custom: attributes[NSFontAttributeName] = customFont[type] ?? font!
+            default:
+                attributes[NSFontAttributeName] = font!
             }
             
             if let highlightFont = hightlightFont {
